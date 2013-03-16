@@ -6,9 +6,13 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TabHost;
+import android.widget.Toast;
 import android.widget.TabHost.TabSpec;
 
 import com.cedarstreettimes.ideasofmarch.xml.parser.Parser;
@@ -46,8 +50,7 @@ public class MainActivity extends Activity {
 	    news_adapter = new NewsListAdapter(MainActivity.this, news_list);
 	    
 	    news_listview.setAdapter(news_adapter);
-	    
-	    
+
 	    
 
 	}

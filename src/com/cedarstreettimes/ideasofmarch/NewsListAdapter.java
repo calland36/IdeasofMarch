@@ -10,10 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -31,10 +35,12 @@ public class NewsListAdapter extends BaseAdapter {
 	private List<Article> news_list;
 	private HttpURLConnection conn;
 	private InputStream is;
+	private Context contx;
 	
 	public NewsListAdapter(Activity context, ArrayList<Article> lista) {
 		this.news_list = lista;
 		this.layout = LayoutInflater.from(context);
+		this.contx = context;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -49,6 +55,28 @@ public class NewsListAdapter extends BaseAdapter {
 			holder.title = (TextView) convertView
 					.findViewById(R.id.textViewTitle);
 			convertView.setTag(holder);
+			
+			final String url = news_list.get(position).getUrl();
+			holder.article.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+	            	contx.startActivity(browserIntent);
+					
+				}
+			});
+			
+			convertView.setOnClickListener(new View.OnClickListener()
+	        {	
+	            //@Override
+	            public void onClick(View v) 
+	            {
+	            	Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+	            	contx.startActivity(browserIntent);
+	            }
+	        });
+			
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
