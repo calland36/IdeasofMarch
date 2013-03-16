@@ -27,6 +27,8 @@ public class MainActivity extends Activity {
 	private ArrayList<Article> news_list, update_list, coplog_list, event_list;
 	private NewsListAdapter news_adapter, coplog_adapter;
 	private Parser pXml;
+	private NotificationManager mNManager;
+	private static final int NOTIFY_ID = 1100;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -182,6 +184,10 @@ public class MainActivity extends Activity {
 					@Override
 					protected Integer doInBackground(String... urls) {
 						//RELOAD DATA
+						Intent intent = new Intent("android.intent.action.MAIN");
+						intent.setComponent(ComponentName.unflattenFromString("com.cedarstreettimes.ideasofmarch/com.cedarstreettimes.ideasofmarch.MainActivity"));
+						intent.addCategory("android.intent.category.LAUNCHER");
+						createNotification("Title","Text",intent);
 						return 0;
 					}
 
@@ -194,6 +200,21 @@ public class MainActivity extends Activity {
 			}
 		});
 		
+	}
+	public void createNotification(CharSequence contentTitle, CharSequence contentText, Intent msgIntent){
+		String ns = Context.NOTIFICATION_SERVICE;
+		mNManager = (NotificationManager) getSystemService(ns);
+		final Notification msg = new Notification(R.drawable.arrow_down,
+		"New event of importance", System.currentTimeMillis());
+		Context context = getApplicationContext();
+		PendingIntent intent = PendingIntent.getActivity(
+			MainActivity.this, 0, msgIntent,
+			Intent.FLAG_ACTIVITY_NEW_TASK);
+		msg.defaults |= Notification.DEFAULT_SOUND;
+		msg.flags |= Notification.FLAG_AUTO_CANCEL;
+		msg.setLatestEventInfo(context, contentTitle, contentText,
+				intent);
+		mNManager.notify(NOTIFY_ID, msg);
 	}
 
 }
