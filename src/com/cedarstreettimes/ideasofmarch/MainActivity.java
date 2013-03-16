@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
+import com.cedarstreettimes.ideasofmarch.xml.parser.Parser;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -26,6 +28,9 @@ public class MainActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 		
+		Parser pXml = new Parser();
+		ArrayList<Article> articles = pXml.parse();
+		
 		TabHost host = (TabHost) findViewById(R.id.tabhost);
 	    host.setup ();
 	    createTabs(host);
@@ -36,12 +41,7 @@ public class MainActivity extends Activity {
 	    events_listview = (PullToRefreshListView) findViewById(R.id.listViewEvents);
 	    createListeners(news_listview, update_listview, coplog_listview, events_listview);
 	    
-	    news_list = new ArrayList<Article>();
-	    news_list.add(new Article());
-	    news_list.add(new Article());
-	    news_list.add(new Article());
-	    news_list.add(new Article());
-	    news_adapter = new NewsListAdapter(MainActivity.this, news_list);
+	    news_adapter = new NewsListAdapter(MainActivity.this, articles);
 	    
 	    news_listview.setAdapter(news_adapter);
 	    

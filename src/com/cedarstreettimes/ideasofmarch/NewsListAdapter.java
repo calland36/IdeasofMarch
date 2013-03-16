@@ -11,6 +11,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +23,8 @@ import android.widget.TextView;
 public class NewsListAdapter extends BaseAdapter {
 
 	private static class ViewHolder {
-		public TextView article;
-		public ImageView imageLeft, imageRight;
+		public TextView article, title;
+		public ImageView image;
 	}
 
 	private LayoutInflater layout;
@@ -43,37 +44,42 @@ public class NewsListAdapter extends BaseAdapter {
 			holder = new ViewHolder();
 			holder.article = (TextView) convertView
 					.findViewById(R.id.textViewArticle);
-			holder.imageLeft = (ImageView) convertView
-					.findViewById(R.id.imageViewArticleLeft);
-			holder.imageRight = (ImageView) convertView
-					.findViewById(R.id.imageViewArticleRight);
+			holder.image = (ImageView) convertView
+					.findViewById(R.id.imageViewArticle);
+			holder.title = (TextView) convertView
+					.findViewById(R.id.textViewTitle);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
+		holder.title.setTypeface(null, Typeface.BOLD);
 		holder.article.setText(news_list.get(position).getArticleText());
-		/*
-		try {
-			conn = (HttpURLConnection) new URL(news_list.get(position).getImageUrl()).openConnection();
-			is = new BufferedInputStream(conn.getInputStream());
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		holder.title.setText(news_list.get(position).getTitle());
 		
-		holder.image.setImageBitmap(BitmapFactory.decodeStream(is));
-		*/
-		
-		if(position%2 == 0){
-			holder.imageLeft.setVisibility(View.VISIBLE);
-			holder.imageRight.setVisibility(View.GONE);
+		if(news_list.get(position).getArticleText().equals("")){
+			holder.image.setVisibility(View.VISIBLE);
+			String [] arr = news_list.get(position).getContextText().split("\"");
+			for(int i = 0; i<arr.length; i++){
+				if(arr[i].startsWith("http")){
+					try {
+						conn = (HttpURLConnection) new URL(arr[i]).openConnection();
+						is = new BufferedInputStream(conn.getInputStream());
+					} catch (MalformedURLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					holder.image.setImageBitmap(BitmapFactory.decodeStream(is));
+					break;
+				}
+			}
 		}else{
-			holder.imageLeft.setVisibility(View.GONE);
-			holder.imageRight.setVisibility(View.VISIBLE);
+			holder.image.setVisibility(View.GONE);
 		}
+		
 		return convertView;
 	}
 
