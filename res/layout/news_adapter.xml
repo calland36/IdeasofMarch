@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layoutTripbook"
-    android:layout_width="wrap_content"
+    android:layout_width="fill_parent"
     android:layout_height="100dp"
     android:gravity="center_horizontal|fill_horizontal"
     android:orientation="horizontal"
@@ -9,22 +8,32 @@
     android:background="@drawable/list_selector">
     
     <ImageView
-        android:id="@+id/imageViewTripbook"
+        android:id="@+id/imageViewArticleLeft"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:src="@drawable/image"
         android:layout_gravity="center"
-        android:padding="5px"/>
+        android:padding="5px"/>	
+    
     <TextView
-        android:id="@+id/textViewNombreTripbook"
-        android:layout_width="fill_parent"
+        android:id="@+id/textViewArticle"
+        android:layout_width="wrap_content"
+        android:layout_weight="0.8"
         android:layout_height="120dp"
         android:inputType="textMultiLine"
         android:gravity="center_vertical"
         android:text="TextView"
         android:textColor="@android:color/black"/>
-
-
+	<ImageView
+        android:id="@+id/imageViewArticleRight"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/image"
+        android:visibility="gone"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_gravity="center"
+        android:padding="5px"/>
 </LinearLayout>

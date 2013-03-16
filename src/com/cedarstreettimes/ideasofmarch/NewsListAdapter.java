@@ -23,7 +23,7 @@ public class NewsListAdapter extends BaseAdapter {
 
 	private static class ViewHolder {
 		public TextView article;
-		public ImageView image;
+		public ImageView imageLeft, imageRight;
 	}
 
 	private LayoutInflater layout;
@@ -42,9 +42,11 @@ public class NewsListAdapter extends BaseAdapter {
 			convertView = layout.inflate(R.layout.news_adapter, null);
 			holder = new ViewHolder();
 			holder.article = (TextView) convertView
-					.findViewById(R.id.textViewNombreTripbook);
-			holder.image = (ImageView) convertView
-					.findViewById(R.id.imageViewTripbook);
+					.findViewById(R.id.textViewArticle);
+			holder.imageLeft = (ImageView) convertView
+					.findViewById(R.id.imageViewArticleLeft);
+			holder.imageRight = (ImageView) convertView
+					.findViewById(R.id.imageViewArticleRight);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -64,6 +66,14 @@ public class NewsListAdapter extends BaseAdapter {
 		
 		holder.image.setImageBitmap(BitmapFactory.decodeStream(is));
 		*/
+		
+		if(position%2 == 0){
+			holder.imageLeft.setVisibility(View.VISIBLE);
+			holder.imageRight.setVisibility(View.GONE);
+		}else{
+			holder.imageLeft.setVisibility(View.GONE);
+			holder.imageRight.setVisibility(View.VISIBLE);
+		}
 		return convertView;
 	}
 

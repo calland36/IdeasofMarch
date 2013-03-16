@@ -180,8 +180,8 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int disabled=0x7f050000;
         public static final int flip=0x7f050008;
         public static final int gridview=0x7f050009;
-        public static final int imageViewTripbook=0x7f050012;
-        public static final int layoutTripbook=0x7f050011;
+        public static final int imageViewArticleLeft=0x7f050011;
+        public static final int imageViewArticleRight=0x7f050013;
         public static final int listViewCopLog=0x7f05000f;
         public static final int listViewEvents=0x7f050010;
         public static final int listViewNews=0x7f05000d;
@@ -198,7 +198,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int rotate=0x7f050007;
         public static final int scrollview=0x7f05000b;
         public static final int tabhost=0x7f05000c;
-        public static final int textViewNombreTripbook=0x7f050013;
+        public static final int textViewArticle=0x7f050012;
         public static final int webview=0x7f05000a;
     }
     public static final class layout {
@@ -235,6 +235,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f080001;
+        public static final int MenuTheme=0x7f080002;
     }
     public static final class styleable {
         /** Attributes that can be used with a PullToRefresh.
