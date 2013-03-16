@@ -25,10 +25,10 @@ public class Parser {
 
 	private URL rssUrl;
 
-	public Parser(){
+	public Parser(String url){
 		
 		try {			
-			this.rssUrl = new URL("http://www.cedarstreettimes.com/feed/");
+			this.rssUrl = new URL(url);
 			
 		}catch (MalformedURLException e){			
 			throw new RuntimeException(e);

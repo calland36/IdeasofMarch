@@ -16,6 +16,7 @@ import android.widget.Toast;
 import android.widget.TabHost.TabSpec;
 
 import com.cedarstreettimes.ideasofmarch.xml.parser.Parser;
+import com.cedarstreettimes.ideasofmarch.xml.parser.URL;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -24,7 +25,7 @@ public class MainActivity extends Activity {
 
 	private PullToRefreshListView news_listview, update_listview, coplog_listview, events_listview;
 	private ArrayList<Article> news_list, update_list, coplog_list, event_list;
-	private NewsListAdapter news_adapter;
+	private NewsListAdapter news_adapter, coplog_adapter;
 	private Parser pXml;
 	
 	@Override
@@ -32,10 +33,11 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
-		
-		pXml = new Parser();
+		//SEND IN BACKGROUND
 		news_list = new ArrayList<Article>();
-		setListViewNews();
+		coplog_list = new ArrayList<Article>();
+		//setListViewNews();
+		setListViewCopLog();
 		
 		TabHost host = (TabHost) findViewById(R.id.tabhost);
 	    host.setup ();
@@ -48,16 +50,23 @@ public class MainActivity extends Activity {
 	    createListeners(news_listview, update_listview, coplog_listview, events_listview);
 	    
 	    news_adapter = new NewsListAdapter(MainActivity.this, news_list);
-	    
+	    coplog_adapter = new NewsListAdapter(MainActivity.this, coplog_list);
 	    news_listview.setAdapter(news_adapter);
-
+	    coplog_listview.setAdapter(coplog_adapter);
+	    
 	    
 
 	}
 	
 	public void setListViewNews(){
+		pXml = new Parser(URL.news_URL);
 		news_list = pXml.parse();
 		//news_adapter.notifyDataSetChanged();
+	}
+	
+	public void setListViewCopLog(){
+		pXml = new Parser(URL.coplog_URL);
+		coplog_list = pXml.parse();
 	}
 	
 	/**
@@ -140,7 +149,6 @@ public class MainActivity extends Activity {
 						update_listview.onRefreshComplete();
 					}
 				}.execute();
-				
 			}
 		});
 		
@@ -152,7 +160,7 @@ public class MainActivity extends Activity {
 
 					@Override
 					protected Integer doInBackground(String... urls) {
-						//RELOAD DATA
+						setListViewCopLog();
 						return 0;
 					}
 
