@@ -33,7 +33,7 @@
 	            android:layout_height="fill_parent"
 	            android:cacheColorHint="@android:color/transparent"
 	            android:divider="@color/blue_light"
-	            android:dividerHeight="1px" />
+	            android:dividerHeight="3px" />
             
         	<com.handmark.pulltorefresh.library.PullToRefreshListView
 	            android:id="@+id/listViewUpdates"
