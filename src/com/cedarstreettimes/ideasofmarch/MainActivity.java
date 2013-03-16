@@ -21,6 +21,7 @@ public class MainActivity extends Activity {
 	private PullToRefreshListView news_listview, update_listview, coplog_listview, events_listview;
 	private ArrayList<Article> news_list, update_list, coplog_list, event_list;
 	private NewsListAdapter news_adapter;
+	private Parser pXml;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +29,9 @@ public class MainActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 		
-		Parser pXml = new Parser();
-		ArrayList<Article> articles = pXml.parse();
+		pXml = new Parser();
+		news_list = new ArrayList<Article>();
+		setListViewNews();
 		
 		TabHost host = (TabHost) findViewById(R.id.tabhost);
 	    host.setup ();
@@ -41,11 +43,18 @@ public class MainActivity extends Activity {
 	    events_listview = (PullToRefreshListView) findViewById(R.id.listViewEvents);
 	    createListeners(news_listview, update_listview, coplog_listview, events_listview);
 	    
-	    news_adapter = new NewsListAdapter(MainActivity.this, articles);
+	    news_adapter = new NewsListAdapter(MainActivity.this, news_list);
 	    
 	    news_listview.setAdapter(news_adapter);
 	    
+	    
+	    
 
+	}
+	
+	public void setListViewNews(){
+		news_list = pXml.parse();
+		//news_adapter.notifyDataSetChanged();
 	}
 	
 	/**
@@ -98,7 +107,7 @@ public class MainActivity extends Activity {
 
 					@Override
 					protected Integer doInBackground(String... urls) {
-						//RELOAD DATA
+						setListViewNews();
 						return 0;
 					}
 
