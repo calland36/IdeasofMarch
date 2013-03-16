@@ -1,34 +1,42 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+<?xml version="1.0" encoding="utf-8"?>
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tabhost"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/hello_world" />
-
-    <TabHost 
-        android:id="@+id/tabHost"
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-        
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
         <TabWidget
-            android:id="@+id/tab1News"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:id="@android:id/tabs"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
 
-            <TextView
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_centerHorizontal="true"
-		        android:layout_centerVertical="true"
-		        android:text="@string/hello_world" />
-        </TabWidget>
-        
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
 
-    </TabHost>
-</RelativeLayout>
+            <ListView
+                android:id="@+id/listView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+            />
+            
+        	<ListView
+                android:id="@+id/listView2"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+            />
+- 
+            <ListView
+                android:id="@+id/listView3"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+            />
+        </FrameLayout>
+    </LinearLayout>
+
+</TabHost>
