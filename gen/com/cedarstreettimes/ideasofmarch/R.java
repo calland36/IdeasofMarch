@@ -151,11 +151,8 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int ptrSubHeaderTextAppearance=0x7f01000b;
     }
     public static final class color {
-<<<<<<< HEAD
         public static final int blue_grey=0x7f060000;
-=======
-        public static final int blue_light=0x7f080000;
->>>>>>> Last push
+        public static final int blue_light=0x7f060001;
     }
     public static final class dimen {
         public static final int header_footer_internal_padding=0x7f070005;
@@ -189,21 +186,12 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int disabled=0x7f050000;
         public static final int flip=0x7f050008;
         public static final int gridview=0x7f050009;
-<<<<<<< HEAD
         public static final int imageView1=0x7f05000d;
-        public static final int imageViewArticleLeft=0x7f050012;
-        public static final int imageViewArticleRight=0x7f050014;
+        public static final int imageViewArticle=0x7f050013;
         public static final int listViewCopLog=0x7f050010;
         public static final int listViewEvents=0x7f050011;
         public static final int listViewNews=0x7f05000e;
         public static final int listViewUpdates=0x7f05000f;
-=======
-        public static final int imageViewArticle=0x7f050012;
-        public static final int listViewCopLog=0x7f05000f;
-        public static final int listViewEvents=0x7f050010;
-        public static final int listViewNews=0x7f05000d;
-        public static final int listViewUpdates=0x7f05000e;
->>>>>>> Last push
         public static final int manualOnly=0x7f050004;
         public static final int pullDownFromTop=0x7f050005;
         public static final int pullFromEnd=0x7f050002;
@@ -216,11 +204,8 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int rotate=0x7f050007;
         public static final int scrollview=0x7f05000b;
         public static final int tabhost=0x7f05000c;
-        public static final int textViewArticle=0x7f050013;
-<<<<<<< HEAD
-=======
-        public static final int textViewTitle=0x7f050011;
->>>>>>> Last push
+        public static final int textViewArticle=0x7f050014;
+        public static final int textViewTitle=0x7f050012;
         public static final int webview=0x7f05000a;
     }
     public static final class layout {
