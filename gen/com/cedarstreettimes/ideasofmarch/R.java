@@ -161,21 +161,29 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
     public static final class drawable {
         public static final int arrow_down=0x7f020000;
         public static final int arrow_up=0x7f020001;
-        public static final int default_ptr_flip=0x7f020002;
-        public static final int default_ptr_flip_bottom=0x7f020003;
-        public static final int default_ptr_flip_top=0x7f020004;
-        public static final int default_ptr_rotate=0x7f020005;
-        public static final int ic_launcher=0x7f020006;
-        public static final int indicator_arrow=0x7f020007;
-        public static final int indicator_bg_bottom=0x7f020008;
-        public static final int indicator_bg_top=0x7f020009;
+        public static final int background_logo=0x7f020002;
+        public static final int default_ptr_flip=0x7f020003;
+        public static final int default_ptr_flip_bottom=0x7f020004;
+        public static final int default_ptr_flip_top=0x7f020005;
+        public static final int default_ptr_rotate=0x7f020006;
+        public static final int ic_launcher=0x7f020007;
+        public static final int image=0x7f020008;
+        public static final int image2=0x7f020009;
+        public static final int indicator_arrow=0x7f02000a;
+        public static final int indicator_bg_bottom=0x7f02000b;
+        public static final int indicator_bg_top=0x7f02000c;
+        public static final int list_selector=0x7f02000d;
+        public static final int logo=0x7f02000e;
     }
     public static final class id {
         public static final int both=0x7f050003;
         public static final int disabled=0x7f050000;
         public static final int flip=0x7f050008;
         public static final int gridview=0x7f050009;
+        public static final int imageViewTripbook=0x7f050012;
+        public static final int layoutTripbook=0x7f050011;
         public static final int listViewCopLog=0x7f05000f;
+        public static final int listViewEvents=0x7f050010;
         public static final int listViewNews=0x7f05000d;
         public static final int listViewUpdates=0x7f05000e;
         public static final int manualOnly=0x7f050004;
@@ -183,18 +191,20 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int pullFromEnd=0x7f050002;
         public static final int pullFromStart=0x7f050001;
         public static final int pullUpFromBottom=0x7f050006;
-        public static final int pull_to_refresh_image=0x7f050010;
-        public static final int pull_to_refresh_progress=0x7f050011;
-        public static final int pull_to_refresh_sub_text=0x7f050013;
-        public static final int pull_to_refresh_text=0x7f050012;
+        public static final int pull_to_refresh_image=0x7f050014;
+        public static final int pull_to_refresh_progress=0x7f050015;
+        public static final int pull_to_refresh_sub_text=0x7f050017;
+        public static final int pull_to_refresh_text=0x7f050016;
         public static final int rotate=0x7f050007;
         public static final int scrollview=0x7f05000b;
         public static final int tabhost=0x7f05000c;
+        public static final int textViewNombreTripbook=0x7f050013;
         public static final int webview=0x7f05000a;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
-        public static final int pull_to_refresh_header=0x7f030001;
+        public static final int news_adapter=0x7f030001;
+        public static final int pull_to_refresh_header=0x7f030002;
     }
     public static final class string {
         public static final int app_name=0x7f070006;
