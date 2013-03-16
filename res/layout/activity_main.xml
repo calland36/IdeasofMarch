@@ -19,23 +19,28 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" >
 
-            <ListView
-                android:id="@+id/listView"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-            />
+           
             
-        	<ListView
-                android:id="@+id/listView2"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-            />
+            <com.handmark.pulltorefresh.library.PullToRefreshListView
+	            android:id="@+id/listViewNews"
+	            android:layout_width="fill_parent"
+	            android:layout_height="fill_parent"
+	            android:cacheColorHint="@android:color/transparent"
+	            android:dividerHeight="1px" />
+            
+        	<com.handmark.pulltorefresh.library.PullToRefreshListView
+	            android:id="@+id/listViewUpdates"
+	            android:layout_width="fill_parent"
+	            android:layout_height="fill_parent"
+	            android:cacheColorHint="@android:color/transparent"
+	            android:dividerHeight="1px" />
 - 
-            <ListView
-                android:id="@+id/listView3"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-            />
+            <com.handmark.pulltorefresh.library.PullToRefreshListView
+	            android:id="@+id/listViewCopLog"
+	            android:layout_width="fill_parent"
+	            android:layout_height="fill_parent"
+	            android:cacheColorHint="@android:color/transparent"
+	            android:dividerHeight="1px" />
         </FrameLayout>
     </LinearLayout>
 
