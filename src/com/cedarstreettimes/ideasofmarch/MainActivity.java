@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
@@ -42,6 +43,7 @@ public class MainActivity extends Activity {
 	private static final int MNU_OPT_TW = 2;
 	private static final int MNU_OPT_MA = 3;
 	
+	private LinearLayout loadinglayout;
 	TabSpec tab1News, tab2Updates, tab3CopLog, tab4Events;
 
 	
@@ -50,6 +52,9 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
+		
+		loadinglayout = (LinearLayout) findViewById(R.id.loadingLayout);
+		loadinglayout.setVisibility(LinearLayout.GONE);
 		
 		news_listview = (PullToRefreshListView) findViewById(R.id.listViewNews);
 	    update_listview = (PullToRefreshListView) findViewById(R.id.listViewUpdates);
@@ -71,9 +76,7 @@ public class MainActivity extends Activity {
 	    coplog_listview.setAdapter(coplog_adapter);
 	    events_listview.setAdapter(event_adapter);
 	    
-		setListViewNews();
-		setListViewCopLog();
-		setListViewEvents();
+	    
 		
 		TabHost host = (TabHost) findViewById(R.id.tabhost);
 	    host.setup ();
@@ -178,6 +181,40 @@ public class MainActivity extends Activity {
 				 
 			}
 		});
+		
+		
+		new AsyncTask<String, Void, Integer>() {
+	    	@Override
+			protected void onPreExecute() {
+				loadinglayout.setVisibility(LinearLayout.VISIBLE);
+				Log.d("APP", "1");
+			}
+	    	
+			@Override
+			protected Integer doInBackground(String... urls) {
+				//MAKE REQUESTS
+				setListViewNews();
+				Log.d("APP", "2");
+				return 0;
+			}
+
+			@Override
+			protected void onPostExecute(Integer result) {
+				Log.d("APP", "3");
+				loadinglayout.setVisibility(LinearLayout.GONE);
+			}
+		}.execute();
+		
+		new AsyncTask<String, Void, Integer>() {
+			
+			@Override
+			protected Integer doInBackground(String... urls) {
+				//MAKE REQUESTS
+				setListViewCopLog();
+				setListViewEvents();
+				return 0;
+			}
+		}.execute();
 	    
 
 	}
