@@ -29,80 +29,105 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class MainActivity extends Activity {
 
+	/** Variables of PullToRefreshListView, which is a library that extends of ListView and add Refresh header*/
 	private PullToRefreshListView news_listview, update_listview, coplog_listview, events_listview;
-	private ArrayList<Article> news_list, update_list, coplog_list;
-	private ArrayList<String> event_list;
+	/** To work with the data, we save it in this ArrayList<Article>*/
+	private ArrayList<Article> news_list, coplog_list;
+	/** To work with the data, we save it in this ArrayList<String>*/
+	private ArrayList<String> event_list, update_list;
+	/** Adapters to edit each item in the list - BaseAdapter*/
 	private NewsListAdapter news_adapter, coplog_adapter, update_adapter;
+	/** Adapters to edit each item in the list - BaseAdapter*/
 	private EventsListAdapter event_adapter;
+	/** Variable to call parser method to get all data from XML*/
 	private ParserXML pXml;
+	/** Variable to call parser method to get all data from HTML*/
 	private ParserHTML pHtml;
 	private NotificationManager mNManager;
 	private static final int NOTIFY_ID = 1100;
 	
+	/** Variables for the different OptionsMenu, so we can know what was selected */
 	private static final int MNU_OPT_FB = 1;
 	private static final int MNU_OPT_TW = 2;
 	private static final int MNU_OPT_MA = 3;
 	
+	/** LinearLayout to show loading state when making a GET request*/
 	private LinearLayout loadinglayout;
-	TabSpec tab1News, tab2Updates, tab3CopLog, tab4Events;
+	/** Different's tabs of the TabHost*/
+	private TabSpec tab1News, tab2Updates, tab3CopLog, tab4Events;
 
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		/** To remove the Title to the APP*/
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 		
+		/** Assign loadinglayout with his XML element*/
 		loadinglayout = (LinearLayout) findViewById(R.id.loadingLayout);
+		/** I hide this layout in case it is visible*/
 		loadinglayout.setVisibility(LinearLayout.GONE);
 		
+		/** Assign listviews from their XML elements*/
 		news_listview = (PullToRefreshListView) findViewById(R.id.listViewNews);
 	    update_listview = (PullToRefreshListView) findViewById(R.id.listViewUpdates);
 	    coplog_listview = (PullToRefreshListView) findViewById(R.id.listViewCopLog);
 	    events_listview = (PullToRefreshListView) findViewById(R.id.listViewEvents);
 		
-		//SEND IN BACKGROUND
+	    /** Initialize the lists*/
 		news_list = new ArrayList<Article>();
 		coplog_list = new ArrayList<Article>();
-		//update_list = new ArrayList<Article>();
+		//update_list = new ArrayList<String>();
 		event_list = new ArrayList<String>();
 		
-		
+		/** Initialize the Adapters - NewsListAdapter & EventsListAdapter
+		 * @param Context       Context to call this View method from the adapter
+		 * @param ArrayList		The List to inflate the ListView*/
 		news_adapter = new NewsListAdapter(MainActivity.this, news_list);
 	    coplog_adapter = new NewsListAdapter(MainActivity.this, coplog_list);
 	    event_adapter = new EventsListAdapter(MainActivity.this, event_list); 
-	    		
+	    
+	    /** Add those Adapter to the ListView we want*/
 	    news_listview.setAdapter(news_adapter);
 	    coplog_listview.setAdapter(coplog_adapter);
 	    events_listview.setAdapter(event_adapter);
 	    
-	    
-		
+	    /** Assign TabHost from the XML element*/
 		TabHost host = (TabHost) findViewById(R.id.tabhost);
+		/** Need to call setup() before adding tabs*/
 	    host.setup ();
+	    /** Call createTabs method*/
 	    createTabs(host);
+	    /** Say which one is going to have the focus */
 	    host.setCurrentTabByTag("News");
 	    
+	    /** I don't allow ListView to Scroll while is Refreshing*/
 	    news_listview.setDisableScrollingWhileRefreshing(true);
 	    update_listview.setDisableScrollingWhileRefreshing(true);
 	    coplog_listview.setDisableScrollingWhileRefreshing(true);
 	    events_listview.setDisableScrollingWhileRefreshing(true);
 		
+	    /** RefreshListener on news_listview so we know when the user pull to refresh*/
 		news_listview.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+				/** new AsyncTask to refresh the ListView in background*/
 				new AsyncTask<String, Void, Integer>() {
-
+					/** Work to do in background (Request)*/
 					@Override
 					protected Integer doInBackground(String... urls) {
+						/** Call setListViewNews() method*/
 						setListViewNews();
 						return 0;
 					}
-
+					/** After doing the doInBackground method we can use View elements*/
 					@Override
 					protected void onPostExecute(Integer result) {
+						/** I notify that the data was changed so refresh the adapter*/
 						news_adapter.notifyDataSetChanged();
+						/** Stop refreshing*/
 						news_listview.onRefreshComplete();
 					}
 				}.execute();
@@ -110,41 +135,52 @@ public class MainActivity extends Activity {
 			
 		});
 		
+		 /** RefreshListener on update_listview so we know when the user pull to refresh*/
 		update_listview.setOnRefreshListener(new OnRefreshListener<ListView>() {
-
+			
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+				/** new AsyncTask to refresh the ListView in background*/
 				new AsyncTask<String, Void, Integer>() {
-
+					/** Work to do in background (Request)*/
 					@Override
 					protected Integer doInBackground(String... urls) {
+						/** Call setListViewUpdate() method*/
 						//RELOAD DATA
 						return 0;
 					}
-
+					/** After doing the doInBackground method we can use View elements*/
 					@Override
 					protected void onPostExecute(Integer result) {
+						/** I notify that the data was changed so refresh the adapter*/
+						
+						/** Stop refreshing*/
 						update_listview.onRefreshComplete();
 					}
 				}.execute();
 			}
 		});
 		
+		 /** RefreshListener on coplog_listview so we know when the user pull to refresh*/
 		coplog_listview.setOnRefreshListener(new OnRefreshListener<ListView>() {
 
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+				/** new AsyncTask to refresh the ListView in background*/
 				new AsyncTask<String, Void, Integer>() {
-
+					/** Work to do in background (Request)*/
 					@Override
 					protected Integer doInBackground(String... urls) {
+						/** Call setListViewCopLog() method*/
 						setListViewCopLog();
 						return 0;
 					}
-
+					/** After doing the doInBackground method we can use View elements*/
 					@Override
 					protected void onPostExecute(Integer result) {
+						/** I notify that the data was changed so refresh the adapter*/
 						coplog_adapter.notifyDataSetChanged();
+						/** Stop refreshing*/
 						coplog_listview.onRefreshComplete();
 					}
 				}.execute();
@@ -152,14 +188,17 @@ public class MainActivity extends Activity {
 			}
 		});
 		
+		 /** RefreshListener on events_listview so we know when the user pull to refresh*/
 		events_listview.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+				/** new AsyncTask to refresh the ListView in background*/
 				new AsyncTask<String, Void, Integer>() {
-
+					/** Work to do in background (Request)*/
 					@Override
 					protected Integer doInBackground(String... urls) {
+						/** Call setListViewEvents() method*/
 						setListViewEvents();
 						Log.d("APP", "ASDFASDFASDF"+event_list.size());
 						//RELOAD DATA
@@ -171,10 +210,12 @@ public class MainActivity extends Activity {
 						*/
 						return 0;
 					}
-
+					/** After doing the doInBackground method we can use View elements*/
 					@Override
 					protected void onPostExecute(Integer result) {
+						/** I notify that the data was changed so refresh the adapter*/
 						event_adapter.notifyDataSetChanged();
+						/** Stop refreshing*/
 						events_listview.onRefreshComplete();
 					}
 				}.execute();
@@ -182,31 +223,34 @@ public class MainActivity extends Activity {
 			}
 		});
 		
-		
+		/** new AsyncTask to load the first time when the APP runs
+		 * And display the 'splash screen'*/
 		new AsyncTask<String, Void, Integer>() {
+			/** Method that execute before doing onBackground*/
 	    	@Override
 			protected void onPreExecute() {
+	    		/** Put loadinglayout to VISIBLE*/
 				loadinglayout.setVisibility(LinearLayout.VISIBLE);
-				Log.d("APP", "1");
 			}
 	    	
+	    	/** Work to do in background (Request)*/
 			@Override
 			protected Integer doInBackground(String... urls) {
 				//MAKE REQUESTS
 				setListViewNews();
-				Log.d("APP", "2");
 				return 0;
 			}
-
+			/** After doing the doInBackground method we can use View elements*/
 			@Override
 			protected void onPostExecute(Integer result) {
-				Log.d("APP", "3");
+				/** Put loadinglayout to GONE, so we hide it*/
 				loadinglayout.setVisibility(LinearLayout.GONE);
 			}
 		}.execute();
 		
+		/** new AsyncTask to load the first time when the APP runs, after news ListView and the 'splash screen'*/
 		new AsyncTask<String, Void, Integer>() {
-			
+			/** Work to do in background (Requests)*/
 			@Override
 			protected Integer doInBackground(String... urls) {
 				//MAKE REQUESTS
@@ -215,23 +259,24 @@ public class MainActivity extends Activity {
 				return 0;
 			}
 		}.execute();
-	    
-
 	}
 	
+	/** Download the news from the WebSite and added to the ListView news.*/
 	public void setListViewNews(){
 		pXml = new ParserXML(URL.news_URL);
 		news_list = pXml.parse();
-			news_adapter.setList(news_list);
+		news_adapter.setList(news_list);
 		
 	}
 	
+	/** Download the CopLog from the WebSite and added to the ListView coplog.*/
 	public void setListViewCopLog(){
 		pXml = new ParserXML(URL.coplog_URL);
 		coplog_list = pXml.parse();
 		coplog_adapter.setList(coplog_list);
 	}
 	
+	/** Download the Calendar Events from the WebSite and added to the ListView events.*/
 	public void setListViewEvents() {
 		pHtml = new ParserHTML();
 		try {
@@ -286,33 +331,39 @@ public class MainActivity extends Activity {
 		mNManager.notify(NOTIFY_ID, msg);
 	}
 	
+	/** Create an OptionsMenu that is display if you press MENU button
+	 * @return true    Always return true, except when something goes wrong*/
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		/**Add all the Options, with their label name and Icon*/
 		menu.add(Menu.NONE, MNU_OPT_FB, Menu.NONE, "FaceBook").setIcon(
 				R.drawable.facebook);
 		menu.add(Menu.NONE, MNU_OPT_TW, Menu.NONE, "Twitter").setIcon(
 				R.drawable.twitter);
 		menu.add(Menu.NONE, MNU_OPT_MA, Menu.NONE, "Mail").setIcon(
 				android.R.drawable.ic_dialog_email);
-		
-
 		return true;
 	}
 
-	// Get menu selection
+	/** Create OptionsItemSelected, method that is called when you select one of the OptionsMenu
+	 * @return true     Always return true when select one of the OptionsMenu*/
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent browserIntent;
+		/** Switch to know which one you press*/
 		switch (item.getItemId()) {
 		case MNU_OPT_FB:
+			/** If you press 1 (MNU_OPT_FB) launch this intent*/
 			browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/cedarstreettimes/"));
 		    startActivity(browserIntent);
 			return true;
 		case MNU_OPT_TW:
+			/** If you press 2 (MNU_OPT_TW) launch this intent*/
 			browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.twitter.com/CedarStTimes/"));
 		    startActivity(browserIntent);
 			return true;
 		case MNU_OPT_MA:
+			/** If you press 3 (MNU_OPT_MA) launch this intent*/
 			browserIntent = new Intent(Intent.ACTION_SEND);
 			browserIntent.setType("text/plain");
 			browserIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"editor@cedarstreettimes.com"});

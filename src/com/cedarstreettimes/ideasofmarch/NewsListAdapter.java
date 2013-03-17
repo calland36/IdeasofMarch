@@ -9,8 +9,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -25,26 +23,38 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
+/** class NewsListAdapter that extends from BaseAdapter*/
 public class NewsListAdapter extends BaseAdapter {
-
+	
+	/** Static class to use a ViewHolder to save here the reference to the elements*/
 	private static class ViewHolder {
 		public TextView article, title;
 		public ImageView image;
 	}
-
+	/** Variable of LayoutInflater to inflate an adapter to a ListView*/
 	private LayoutInflater layout;
+	/** List<String> where all data is taken*/
 	private List<Article> news_list;
+	/** To make a HTTP Request if there is no text and an image*/
 	private HttpURLConnection conn;
+	/** To buffer the image we get with HTTP request*/
 	private InputStream is;
+	/** Context to be called inside getView() method*/
 	private Context contx;
 	
+	/** Constructor 
+	 * @param context       To get the LayoutInflater, we need the context
+	 * @param list			To know the data I have to put into the list*/
 	public NewsListAdapter(Activity context, ArrayList<Article> list) {
 		this.news_list = list;
 		this.layout = LayoutInflater.from(context);
 		this.contx = context;
 	}
-
+	
+	/** Method to inflate the View - Called for all elements of the list
+	 * @param position 		Which position are we referring to.
+	 * @param convertView	To know if it was inflated before
+	 * @param parent		To know the parent of this View*/
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
 		if (convertView == null) {
@@ -59,6 +69,7 @@ public class NewsListAdapter extends BaseAdapter {
 			convertView.setTag(holder);
 			
 			final String url = news_list.get(position).getUrl();
+			/** Make listeners to the list elements, so when you click will launch the WebSite - ARTICLE TEXT*/
 			holder.article.setOnClickListener(new OnClickListener() {
 				
 				@Override
@@ -68,7 +79,7 @@ public class NewsListAdapter extends BaseAdapter {
 					
 				}
 			});
-			
+			/** Make listeners to the list elements, so when you click will launch the WebSite - TITLE*/
 			convertView.setOnClickListener(new View.OnClickListener()
 	        {	
 	            //@Override
@@ -86,6 +97,7 @@ public class NewsListAdapter extends BaseAdapter {
 		holder.article.setText(news_list.get(position).getArticleText());
 		holder.title.setText(news_list.get(position).getTitle());
 		
+		/** If this element have no text, then will have an image*/
 		if(news_list.get(position).getArticleText().equals("")){
 			holder.image.setVisibility(View.VISIBLE);
 			String [] arr = news_list.get(position).getContextText().split("\"");
@@ -112,21 +124,26 @@ public class NewsListAdapter extends BaseAdapter {
 		
 		return convertView;
 	}
-
+	/** To get the size of the List we have
+	 * @return Integer		The size of the list*/
 	public int getCount() {
 		// TODO Auto-generated method stub
 		return news_list.size();
 	}
-
+	/** To update the list
+	 * @param list			To override the actual list with what we send*/
 	public void setList(ArrayList<Article> list){
 		this.news_list = list;
 	}
 	
-	public Object getItem(int arg0) {
+	/** NOT IMPLEMENTED - Method to getItem from the list, sending position
+	 * @param Integer		The position where is the Item we want*/
+	public Object getItem(int position) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	/** NOT IMPLEMENTED - Method to getItemID from the list, sending position
+	 * @param Integer		The position where is the Item we want to get the Id*/
 	public long getItemId(int arg0) {
 		// TODO Auto-generated method stub
 		return 0;
