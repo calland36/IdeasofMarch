@@ -6,16 +6,17 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
+import com.cedarstreettimes.ideasofmarch.xml.parser.ParserHTML;
 import com.cedarstreettimes.ideasofmarch.xml.parser.ParserXML;
 import com.cedarstreettimes.ideasofmarch.xml.parser.URL;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -25,9 +26,12 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 public class MainActivity extends Activity {
 
 	private PullToRefreshListView news_listview, update_listview, coplog_listview, events_listview;
-	private ArrayList<Article> news_list, update_list, coplog_list, event_list;
-	private NewsListAdapter news_adapter, coplog_adapter, update_adapter, event_adapter;
+	private ArrayList<Article> news_list, update_list, coplog_list;
+	private ArrayList<String> event_list;
+	private NewsListAdapter news_adapter, coplog_adapter, update_adapter;
+	private EventsListAdapter event_adapter;
 	private ParserXML pXml;
+	private ParserHTML pHtml;
 	private NotificationManager mNManager;
 	private static final int NOTIFY_ID = 1100;
 	
@@ -48,32 +52,125 @@ public class MainActivity extends Activity {
 		//SEND IN BACKGROUND
 		news_list = new ArrayList<Article>();
 		coplog_list = new ArrayList<Article>();
-		update_list = new ArrayList<Article>();
-		event_list = new ArrayList<Article>();
+		//update_list = new ArrayList<Article>();
+		event_list = new ArrayList<String>();
+		
 		
 		news_adapter = new NewsListAdapter(MainActivity.this, news_list);
 	    coplog_adapter = new NewsListAdapter(MainActivity.this, coplog_list);
+	    event_adapter = new EventsListAdapter(MainActivity.this, event_list); 
+	    		
 	    news_listview.setAdapter(news_adapter);
 	    coplog_listview.setAdapter(coplog_adapter);
-		
+	    events_listview.setAdapter(event_adapter);
+	    
 		setListViewNews();
 		setListViewCopLog();
+		setListViewEvents();
 		
 		TabHost host = (TabHost) findViewById(R.id.tabhost);
 	    host.setup ();
 	    createTabs(host);
 	    host.setCurrentTabByTag("News");
 	    
-	    
-	    //createListeners(news_listview, update_listview, coplog_listview, events_listview);
-	    /////////////////////////////
-	    
-	    
-	    
-	    
-	    ////////////////////////////
-	    
-	    
+	    news_listview.setDisableScrollingWhileRefreshing(true);
+	    update_listview.setDisableScrollingWhileRefreshing(true);
+	    coplog_listview.setDisableScrollingWhileRefreshing(true);
+	    events_listview.setDisableScrollingWhileRefreshing(true);
+		
+		news_listview.setOnRefreshListener(new OnRefreshListener<ListView>() {
+			
+			@Override
+			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+				new AsyncTask<String, Void, Integer>() {
+
+					@Override
+					protected Integer doInBackground(String... urls) {
+						setListViewNews();
+						return 0;
+					}
+
+					@Override
+					protected void onPostExecute(Integer result) {
+						news_adapter.notifyDataSetChanged();
+						news_listview.onRefreshComplete();
+					}
+				}.execute();
+			}
+			
+		});
+		
+		update_listview.setOnRefreshListener(new OnRefreshListener<ListView>() {
+
+			@Override
+			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+				new AsyncTask<String, Void, Integer>() {
+
+					@Override
+					protected Integer doInBackground(String... urls) {
+						//RELOAD DATA
+						return 0;
+					}
+
+					@Override
+					protected void onPostExecute(Integer result) {
+						update_listview.onRefreshComplete();
+					}
+				}.execute();
+			}
+		});
+		
+		coplog_listview.setOnRefreshListener(new OnRefreshListener<ListView>() {
+
+			@Override
+			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+				new AsyncTask<String, Void, Integer>() {
+
+					@Override
+					protected Integer doInBackground(String... urls) {
+						setListViewCopLog();
+						return 0;
+					}
+
+					@Override
+					protected void onPostExecute(Integer result) {
+						coplog_adapter.notifyDataSetChanged();
+						coplog_listview.onRefreshComplete();
+					}
+				}.execute();
+				
+			}
+		});
+		
+		events_listview.setOnRefreshListener(new OnRefreshListener<ListView>() {
+			
+			@Override
+			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+				new AsyncTask<String, Void, Integer>() {
+
+					@Override
+					protected Integer doInBackground(String... urls) {
+						setListViewEvents();
+						Log.d("APP", "ASDFASDFASDF"+event_list.size());
+						//RELOAD DATA
+						/*
+						Intent intent = new Intent("android.intent.action.MAIN");
+						intent.setComponent(ComponentName.unflattenFromString("com.cedarstreettimes.ideasofmarch/com.cedarstreettimes.ideasofmarch.MainActivity"));
+						intent.addCategory("android.intent.category.LAUNCHER");
+						createNotification("Title","Text",intent);
+						*/
+						return 0;
+					}
+
+					@Override
+					protected void onPostExecute(Integer result) {
+						event_adapter.notifyDataSetChanged();
+						events_listview.onRefreshComplete();
+					}
+				}.execute();
+				 
+			}
+		});
 	    
 
 	}
@@ -88,8 +185,19 @@ public class MainActivity extends Activity {
 	public void setListViewCopLog(){
 		pXml = new ParserXML(URL.coplog_URL);
 		coplog_list = pXml.parse();
-			coplog_adapter.setList(coplog_list);
-		
+		coplog_adapter.setList(coplog_list);
+	}
+	
+	public void setListViewEvents() {
+		pHtml = new ParserHTML();
+		try {
+			event_list = pHtml.scrapeEvents();
+			event_adapter.setList(event_list);
+			//event_adapter.notifyDataSetChanged();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -118,113 +226,6 @@ public class MainActivity extends Activity {
 	    host.addTab(tab4Events);
 	}
 	
-	/**
-	 * Method to create all listeners at once
-	 * @param news_listview     ListView of news at tab1
-	 * @param update_listview   ListView of updates at tab2
-	 * @param coplog_listview   ListView of cop log at tab3
-	 * @param events_listview   ListView of events at tab4
-	 */
-	public void createListeners(PullToRefreshListView news_listview, 
-			PullToRefreshListView update_listview, 
-			PullToRefreshListView coplog_listview,
-			PullToRefreshListView events_listview){
-
-	    news_listview.setDisableScrollingWhileRefreshing(true);
-	    update_listview.setDisableScrollingWhileRefreshing(true);
-	    coplog_listview.setDisableScrollingWhileRefreshing(true);
-	    events_listview.setDisableScrollingWhileRefreshing(true);
-		
-		news_listview.setOnRefreshListener(new OnRefreshListener<ListView>() {
-			
-			@Override
-			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				new AsyncTask<String, Void, Integer>() {
-
-					@Override
-					protected Integer doInBackground(String... urls) {
-						setListViewNews();
-						return 0;
-					}
-
-					@Override
-					protected void onPostExecute(Integer result) {
-						news_adapter.notifyDataSetChanged();
-						MainActivity.this.news_listview.onRefreshComplete();
-					}
-				}.execute();
-			}
-			
-		});
-		
-		update_listview.setOnRefreshListener(new OnRefreshListener<ListView>() {
-
-			@Override
-			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				new AsyncTask<String, Void, Integer>() {
-
-					@Override
-					protected Integer doInBackground(String... urls) {
-						//RELOAD DATA
-						return 0;
-					}
-
-					@Override
-					protected void onPostExecute(Integer result) {
-						MainActivity.this.update_listview.onRefreshComplete();
-					}
-				}.execute();
-			}
-		});
-		
-		coplog_listview.setOnRefreshListener(new OnRefreshListener<ListView>() {
-
-			@Override
-			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				new AsyncTask<String, Void, Integer>() {
-
-					@Override
-					protected Integer doInBackground(String... urls) {
-						setListViewCopLog();
-						return 0;
-					}
-
-					@Override
-					protected void onPostExecute(Integer result) {
-						coplog_adapter.notifyDataSetChanged();
-						MainActivity.this.coplog_listview.onRefreshComplete();
-					}
-				}.execute();
-				
-			}
-		});
-		
-		events_listview.setOnRefreshListener(new OnRefreshListener<ListView>() {
-			
-			@Override
-			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				new AsyncTask<String, Void, Integer>() {
-
-					@Override
-					protected Integer doInBackground(String... urls) {
-						//RELOAD DATA
-						Intent intent = new Intent("android.intent.action.MAIN");
-						intent.setComponent(ComponentName.unflattenFromString("com.cedarstreettimes.ideasofmarch/com.cedarstreettimes.ideasofmarch.MainActivity"));
-						intent.addCategory("android.intent.category.LAUNCHER");
-						createNotification("Title","Text",intent);
-						return 0;
-					}
-
-					@Override
-					protected void onPostExecute(Integer result) {
-						MainActivity.this.events_listview.onRefreshComplete();
-					}
-				}.execute();
-				 
-			}
-		});
-		
-	}
 	public void createNotification(CharSequence contentTitle, CharSequence contentText, Intent msgIntent){
 		String ns = Context.NOTIFICATION_SERVICE;
 		mNManager = (NotificationManager) getSystemService(ns);
