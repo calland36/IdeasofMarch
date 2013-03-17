@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -19,6 +18,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
+
+import com.google.ads.*;
 
 import com.cedarstreettimes.ideasofmarch.xml.parser.ParserHTML;
 import com.cedarstreettimes.ideasofmarch.xml.parser.ParserXML;
@@ -30,15 +31,15 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 public class MainActivity extends Activity {
 
 	/** Variables of PullToRefreshListView, which is a library that extends of ListView and add Refresh header*/
-	private PullToRefreshListView news_listview, update_listview, coplog_listview, events_listview;
+	private PullToRefreshListView news_listview, community_listview, coplog_listview, events_listview;
 	/** To work with the data, we save it in this ArrayList<Article>*/
 	private ArrayList<Article> news_list, coplog_list;
 	/** To work with the data, we save it in this ArrayList<String>*/
-	private ArrayList<String> event_list, update_list;
+	private ArrayList<String> event_list, community_list;
 	/** Adapters to edit each item in the list - BaseAdapter*/
-	private NewsListAdapter news_adapter, coplog_adapter, update_adapter;
+	private NewsListAdapter news_adapter, coplog_adapter;
 	/** Adapters to edit each item in the list - BaseAdapter*/
-	private EventsListAdapter event_adapter;
+	private EventsListAdapter event_adapter, community_adapter;
 	/** Variable to call parser method to get all data from XML*/
 	private ParserXML pXml;
 	/** Variable to call parser method to get all data from HTML*/
@@ -56,6 +57,7 @@ public class MainActivity extends Activity {
 	/** Different's tabs of the TabHost*/
 	private TabSpec tab1News, tab2Updates, tab3CopLog, tab4Events;
 
+	private AdView adView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,14 +73,14 @@ public class MainActivity extends Activity {
 		
 		/** Assign listviews from their XML elements*/
 		news_listview = (PullToRefreshListView) findViewById(R.id.listViewNews);
-	    update_listview = (PullToRefreshListView) findViewById(R.id.listViewUpdates);
+	    community_listview = (PullToRefreshListView) findViewById(R.id.listViewUpdates);
 	    coplog_listview = (PullToRefreshListView) findViewById(R.id.listViewCopLog);
 	    events_listview = (PullToRefreshListView) findViewById(R.id.listViewEvents);
 		
 	    /** Initialize the lists*/
 		news_list = new ArrayList<Article>();
 		coplog_list = new ArrayList<Article>();
-		//update_list = new ArrayList<String>();
+		community_list = new ArrayList<String>();
 		event_list = new ArrayList<String>();
 		
 		/** Initialize the Adapters - NewsListAdapter & EventsListAdapter
@@ -87,11 +89,13 @@ public class MainActivity extends Activity {
 		news_adapter = new NewsListAdapter(MainActivity.this, news_list);
 	    coplog_adapter = new NewsListAdapter(MainActivity.this, coplog_list);
 	    event_adapter = new EventsListAdapter(MainActivity.this, event_list); 
+	    community_adapter = new EventsListAdapter(MainActivity.this, community_list); 
 	    
 	    /** Add those Adapter to the ListView we want*/
 	    news_listview.setAdapter(news_adapter);
 	    coplog_listview.setAdapter(coplog_adapter);
 	    events_listview.setAdapter(event_adapter);
+	    community_listview.setAdapter(community_adapter);
 	    
 	    /** Assign TabHost from the XML element*/
 		TabHost host = (TabHost) findViewById(R.id.tabhost);
@@ -104,10 +108,31 @@ public class MainActivity extends Activity {
 	    
 	    /** I don't allow ListView to Scroll while is Refreshing*/
 	    news_listview.setDisableScrollingWhileRefreshing(true);
-	    update_listview.setDisableScrollingWhileRefreshing(true);
+	    community_listview.setDisableScrollingWhileRefreshing(true);
 	    coplog_listview.setDisableScrollingWhileRefreshing(true);
 	    events_listview.setDisableScrollingWhileRefreshing(true);
 		
+	    /**Ads here:*/
+	    adView=new AdView(MainActivity.this, AdSize.BANNER,"a15144e917e69cb" );
+	    LinearLayout layout = (LinearLayout)findViewById(R.id.mainLayout);
+	    layout.addView(adView);
+	    
+	    new AsyncTask<String, Void, Integer>() {
+			/** Work to do in background (Request)*/
+			@Override
+			protected Integer doInBackground(String... urls) {
+				return 0;
+			}
+			/** After doing the doInBackground method we can use View elements*/
+			@Override
+			protected void onPostExecute(Integer result) {
+				adView.loadAd(new AdRequest());
+			}
+		}.execute();
+	    
+	    
+	    
+	    
 	    /** RefreshListener on news_listview so we know when the user pull to refresh*/
 		news_listview.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			
@@ -136,7 +161,7 @@ public class MainActivity extends Activity {
 		});
 		
 		 /** RefreshListener on update_listview so we know when the user pull to refresh*/
-		update_listview.setOnRefreshListener(new OnRefreshListener<ListView>() {
+		community_listview.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			
 			@Override
 			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
@@ -146,16 +171,16 @@ public class MainActivity extends Activity {
 					@Override
 					protected Integer doInBackground(String... urls) {
 						/** Call setListViewUpdate() method*/
-						//RELOAD DATA
+						setListViewCommunity();
 						return 0;
 					}
 					/** After doing the doInBackground method we can use View elements*/
 					@Override
 					protected void onPostExecute(Integer result) {
 						/** I notify that the data was changed so refresh the adapter*/
-						
+						community_adapter.notifyDataSetChanged();
 						/** Stop refreshing*/
-						update_listview.onRefreshComplete();
+						community_listview.onRefreshComplete();
 					}
 				}.execute();
 			}
@@ -200,14 +225,6 @@ public class MainActivity extends Activity {
 					protected Integer doInBackground(String... urls) {
 						/** Call setListViewEvents() method*/
 						setListViewEvents();
-						Log.d("APP", "ASDFASDFASDF"+event_list.size());
-						//RELOAD DATA
-						/*
-						Intent intent = new Intent("android.intent.action.MAIN");
-						intent.setComponent(ComponentName.unflattenFromString("com.cedarstreettimes.ideasofmarch/com.cedarstreettimes.ideasofmarch.MainActivity"));
-						intent.addCategory("android.intent.category.LAUNCHER");
-						createNotification("Title","Text",intent);
-						*/
 						return 0;
 					}
 					/** After doing the doInBackground method we can use View elements*/
@@ -255,7 +272,28 @@ public class MainActivity extends Activity {
 			protected Integer doInBackground(String... urls) {
 				//MAKE REQUESTS
 				setListViewCopLog();
+				return 0;
+			}
+		}.execute();
+		
+		/** new AsyncTask to load the first time when the APP runs, after news ListView and the 'splash screen'*/
+		new AsyncTask<String, Void, Integer>() {
+			/** Work to do in background (Requests)*/
+			@Override
+			protected Integer doInBackground(String... urls) {
+				//MAKE REQUESTS
 				setListViewEvents();
+				return 0;
+			}
+		}.execute();
+		
+		/** new AsyncTask to load the first time when the APP runs, after news ListView and the 'splash screen'*/
+		new AsyncTask<String, Void, Integer>() {
+			/** Work to do in background (Requests)*/
+			@Override
+			protected Integer doInBackground(String... urls) {
+				//MAKE REQUESTS
+				setListViewCommunity();
 				return 0;
 			}
 		}.execute();
@@ -289,6 +327,18 @@ public class MainActivity extends Activity {
 		}
 	}
 	
+	public void setListViewCommunity(){
+		pHtml = new ParserHTML(URL.community_URL);
+		try {
+			community_list = pHtml.scrapeUpdates();
+			community_adapter.setList(community_list);
+			//event_adapter.notifyDataSetChanged();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Method to create tabs and add a title, image...
 	 * @param host TabHost is already setup() so we have to add tab
@@ -299,8 +349,8 @@ public class MainActivity extends Activity {
 	    tab1News.setContent(R.id.listViewNews);
 	    host.addTab(tab1News);
 
-	    tab2Updates = host.newTabSpec("Updates");
-	    tab2Updates.setIndicator("Updates", getResources().getDrawable(android.R.drawable.star_on));
+	    tab2Updates = host.newTabSpec("Community");
+	    tab2Updates.setIndicator("Community", getResources().getDrawable(android.R.drawable.star_on));
 	    tab2Updates.setContent(R.id.listViewUpdates);
 	    host.addTab(tab2Updates);
 	    
@@ -374,6 +424,14 @@ public class MainActivity extends Activity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+	
+	@Override
+	public void onDestroy() {
+		if(adView !=null) {
+			adView.destroy();
+		}
+		super.onDestroy();
 	}
 
 }

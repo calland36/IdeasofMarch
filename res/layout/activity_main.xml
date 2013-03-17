@@ -5,10 +5,20 @@
     android:layout_height="fill_parent" >
 
     <LinearLayout
+        android:id="@+id/mainLayout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical" >
 
+        <com.google.ads.AdView 
+            xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            ads:adUnitId="a15144e917e69cb"
+            ads:adSize="BANNER"
+            ads:loadAdOnCreate="true"/>
+        
         <ImageView
             android:id="@+id/imageView1"
             android:layout_width="match_parent"
@@ -22,11 +32,13 @@
 	        android:layout_height="match_parent"
 	        android:visibility="gone"
 	        android:layout_gravity="center">
-	        <include
+	        
+            <include
 	            android:layout_gravity="center"
 		        android:layout_width="fill_parent"
 		        android:layout_height="wrap_content"
 		        layout="@layout/loading" />
+	        
     </LinearLayout>
 	    
         
@@ -55,7 +67,8 @@
 	            android:layout_width="fill_parent"
 	            android:layout_height="fill_parent"
 	            android:cacheColorHint="@android:color/transparent"
-	            android:dividerHeight="1px" />
+	            android:divider="@color/blue_light"
+	            android:dividerHeight="3px" />
 - 
             <com.handmark.pulltorefresh.library.PullToRefreshListView
 	            android:id="@+id/listViewCopLog"
@@ -70,7 +83,8 @@
 	            android:layout_width="fill_parent"
 	            android:layout_height="fill_parent"
 	            android:cacheColorHint="@android:color/transparent"
-	            android:dividerHeight="1px" />
+	            android:divider="@color/blue_light"
+	            android:dividerHeight="3px" />
         </FrameLayout>
         
     </LinearLayout>

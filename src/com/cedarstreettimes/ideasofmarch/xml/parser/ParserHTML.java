@@ -30,11 +30,23 @@ public class ParserHTML {
 	   s = Jsoup.parse(s).text();
 	   String[] events = s.split("¥");
 	   for(int i=0;i<events.length;i++){
-		   Log.d("APP", "i: "+events[i]);
 	   	   events[i] = events[i].trim();
 	   }
 	   ArrayList<String> al = new ArrayList<String>(Arrays.asList(events));
 	   return al;
 	}
-
+	
+	public ArrayList<String> scrapeUpdates(String... args) throws Exception {
+        ArrayList<String> updates = new ArrayList<String>();
+        org.jsoup.nodes.Document doc = Jsoup.connect(htmlUrl).get();
+        Elements tweetUsers = doc.select("span.username");
+        Elements tweetTexts = doc.select("span.tweetcontent");
+        Elements tweetTimes = doc.select("span.timestamp");
+        for(int i=0;i<tweetUsers.size();i++){
+            updates.add(tweetTexts.get(i).html()+"\n"+tweetUsers.get(i).html()+" - "+tweetTimes.get(i).html());
+            Log.d("APP",updates.get(i));
+        }
+        
+        return updates;
+    }
 }
