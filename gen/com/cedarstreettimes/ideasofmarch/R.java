@@ -171,15 +171,17 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int default_ptr_flip_bottom=0x7f020005;
         public static final int default_ptr_flip_top=0x7f020006;
         public static final int default_ptr_rotate=0x7f020007;
-        public static final int ic_launcher=0x7f020008;
-        public static final int image=0x7f020009;
-        public static final int image2=0x7f02000a;
-        public static final int indicator_arrow=0x7f02000b;
-        public static final int indicator_bg_bottom=0x7f02000c;
-        public static final int indicator_bg_top=0x7f02000d;
-        public static final int list_selector=0x7f02000e;
-        public static final int logo=0x7f02000f;
-        public static final int treeslogo=0x7f020010;
+        public static final int facebook=0x7f020008;
+        public static final int ic_launcher=0x7f020009;
+        public static final int image=0x7f02000a;
+        public static final int image2=0x7f02000b;
+        public static final int indicator_arrow=0x7f02000c;
+        public static final int indicator_bg_bottom=0x7f02000d;
+        public static final int indicator_bg_top=0x7f02000e;
+        public static final int list_selector=0x7f02000f;
+        public static final int logo=0x7f020010;
+        public static final int treeslogo=0x7f020011;
+        public static final int twitter=0x7f020012;
     }
     public static final class id {
         public static final int both=0x7f050003;

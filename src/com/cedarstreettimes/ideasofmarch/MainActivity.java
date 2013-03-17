@@ -8,9 +8,12 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.Window;
 import android.widget.ListView;
 import android.widget.TabHost;
@@ -34,6 +37,10 @@ public class MainActivity extends Activity {
 	private ParserHTML pHtml;
 	private NotificationManager mNManager;
 	private static final int NOTIFY_ID = 1100;
+	
+	private static final int MNU_OPT_FB = 1;
+	private static final int MNU_OPT_TW = 2;
+	private static final int MNU_OPT_MA = 3;
 	
 	TabSpec tab1News, tab2Updates, tab3CopLog, tab4Events;
 
@@ -240,6 +247,45 @@ public class MainActivity extends Activity {
 		msg.setLatestEventInfo(context, contentTitle, contentText,
 				intent);
 		mNManager.notify(NOTIFY_ID, msg);
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(Menu.NONE, MNU_OPT_FB, Menu.NONE, "FaceBook").setIcon(
+				R.drawable.facebook);
+		menu.add(Menu.NONE, MNU_OPT_TW, Menu.NONE, "Twitter").setIcon(
+				R.drawable.twitter);
+		menu.add(Menu.NONE, MNU_OPT_MA, Menu.NONE, "Mail").setIcon(
+				android.R.drawable.ic_dialog_email);
+		
+
+		return true;
+	}
+
+	// Get menu selection
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent browserIntent;
+		switch (item.getItemId()) {
+		case MNU_OPT_FB:
+			browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/cedarstreettimes/"));
+		    startActivity(browserIntent);
+			return true;
+		case MNU_OPT_TW:
+			browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.twitter.com/CedarStTimes/"));
+		    startActivity(browserIntent);
+			return true;
+		case MNU_OPT_MA:
+			browserIntent = new Intent(Intent.ACTION_SEND);
+			browserIntent.setType("text/plain");
+			browserIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"editor@cedarstreettimes.com"});
+			browserIntent.putExtra(Intent.EXTRA_SUBJECT, "Doubt");
+			browserIntent.putExtra(Intent.EXTRA_TEXT, "Hi Editor! ");
+			startActivity(Intent.createChooser(browserIntent, "Send Email"));
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 }
