@@ -9,6 +9,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -37,8 +39,8 @@ public class NewsListAdapter extends BaseAdapter {
 	private InputStream is;
 	private Context contx;
 	
-	public NewsListAdapter(Activity context, ArrayList<Article> lista) {
-		this.news_list = lista;
+	public NewsListAdapter(Activity context, ArrayList<Article> list) {
+		this.news_list = list;
 		this.layout = LayoutInflater.from(context);
 		this.contx = context;
 	}
@@ -116,6 +118,10 @@ public class NewsListAdapter extends BaseAdapter {
 		return news_list.size();
 	}
 
+	public void setList(ArrayList<Article> list){
+		this.news_list = list;
+	}
+	
 	public Object getItem(int arg0) {
 		// TODO Auto-generated method stub
 		return null;

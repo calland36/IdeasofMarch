@@ -20,12 +20,12 @@ import android.util.Log;
 import com.cedarstreettimes.ideasofmarch.Article;
 
 
-public class Parser {
+public class ParserXML {
 
 
 	private URL rssUrl;
 
-	public Parser(String url){
+	public ParserXML(String url){
 		
 		try {			
 			this.rssUrl = new URL(url);

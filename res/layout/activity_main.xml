@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical" >
@@ -18,12 +18,14 @@
         <TabWidget
             android:id="@android:id/tabs"
             android:layout_width="fill_parent"
+            android:layout_below="@id/imageView1"
             android:layout_height="wrap_content" />
 
         <FrameLayout
             android:id="@android:id/tabcontent"
             android:layout_width="fill_parent"
 			android:background="@drawable/background_grey"
+			android:layout_below="@android:id/tabs"
             android:layout_height="fill_parent" >
            
             
@@ -57,6 +59,18 @@
 	            android:cacheColorHint="@android:color/transparent"
 	            android:dividerHeight="1px" />
         </FrameLayout>
-    </LinearLayout>
+        <!--
+        <com.google.ads.AdView 
+            
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            ads:adUnitId="a152144e917e69cd"
+            ads:adSize="BANNER"
+            ads:testDevices="TEST_EMULATOR, TEST_DEVICE_ID"
+            adsLloadAdOnCreate="true"
+            android:layout_alignBottom="true"/>
+        -->
+    </RelativeLayout>
 
 </TabHost>
