@@ -5,31 +5,27 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.jsoup.Jsoup;
-import org.jsoup.select.Elements;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import android.util.Log;
-
 import com.cedarstreettimes.ideasofmarch.Article;
 
-
+/** Class ParserXML is to parse XML WebSites and add them to the APP*/
 public class ParserXML {
 
-
 	private URL rssUrl;
-
+	
+	/** Constructor to create empty object*/
 	public ParserXML(){
 	}
-	
+	/** Constructor to create object with an URL 
+	 * @param String	The URL String we want to parse*/
 	public ParserXML(String url){
 		
 		try {			
@@ -39,7 +35,9 @@ public class ParserXML {
 			throw new RuntimeException(e);
 		}
 	}
-
+	
+	/** Method that make all the stuff of parse the data from XML
+	 * @return ArrayList<Article>	return a List with the data saved inside*/
 	public ArrayList<Article> parse(){
 		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -92,7 +90,10 @@ public class ParserXML {
 		} 
 		return news_list;
 	}
-
+	
+	/** To get the data(text) from a XML Node
+	 * @param Node		We receive a node to take all data
+	 * @return String	The whole text we already get the data*/
 	private String getNodeText(Node data){
 		StringBuilder text = new StringBuilder();
 		NodeList fragments = data.getChildNodes();
@@ -100,7 +101,7 @@ public class ParserXML {
 		for (int k=0;k<fragments.getLength();k++){
 			text.append(fragments.item(k).getNodeValue());
 		}
-
+		/** In the text there are &#8217; that suppose to be " ' "*/
 		return text.toString().replace("&#8217;", "'");
 	}
 

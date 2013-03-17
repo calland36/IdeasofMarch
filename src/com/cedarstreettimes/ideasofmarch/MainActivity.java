@@ -278,7 +278,7 @@ public class MainActivity extends Activity {
 	
 	/** Download the Calendar Events from the WebSite and added to the ListView events.*/
 	public void setListViewEvents() {
-		pHtml = new ParserHTML();
+		pHtml = new ParserHTML(URL.events_URL);
 		try {
 			event_list = pHtml.scrapeEvents();
 			event_adapter.setList(event_list);
