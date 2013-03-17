@@ -8,3 +8,5 @@
 *.apk
 
 *.dex
+
+*.class
