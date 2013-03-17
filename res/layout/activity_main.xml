@@ -9,17 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical" >
-
-        <com.google.ads.AdView 
-            xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
-            android:id="@+id/adView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            ads:adUnitId="a15144e917e69cb"
-            ads:adSize="BANNER"
-            ads:loadAdOnCreate="true"/>
-        
-        <ImageView
+	    <ImageView
             android:id="@+id/imageView1"
             android:layout_width="match_parent"
             android:layout_height="56dp"
@@ -40,13 +30,13 @@
 		        layout="@layout/loading" />
 	        
     </LinearLayout>
-	    
+	   
         
 		<TabWidget
             android:id="@android:id/tabs"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
-
+		
 		<FrameLayout
             android:id="@android:id/tabcontent"
             android:layout_width="fill_parent"
@@ -88,5 +78,21 @@
         </FrameLayout>
         
     </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/relative"
+        android:orientation="vertical"
+        android:layout_width="fill_parent" 
+        android:layout_height="fill_parent">
+		<com.google.ads.AdView 
+            xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_height="wrap_content"
+            ads:adUnitId="a15144e917e69cb"
+            ads:adSize="BANNER"
+            ads:loadAdOnCreate="true"/>
+		
+    </RelativeLayout>
 
 </TabHost>

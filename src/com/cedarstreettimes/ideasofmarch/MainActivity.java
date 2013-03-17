@@ -16,14 +16,16 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
-
-import com.google.ads.*;
 
 import com.cedarstreettimes.ideasofmarch.xml.parser.ParserHTML;
 import com.cedarstreettimes.ideasofmarch.xml.parser.ParserXML;
 import com.cedarstreettimes.ideasofmarch.xml.parser.URL;
+import com.google.ads.AdRequest;
+import com.google.ads.AdSize;
+import com.google.ads.AdView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -112,27 +114,6 @@ public class MainActivity extends Activity {
 	    coplog_listview.setDisableScrollingWhileRefreshing(true);
 	    events_listview.setDisableScrollingWhileRefreshing(true);
 		
-	    /**Ads here:*/
-	    adView=new AdView(MainActivity.this, AdSize.BANNER,"a15144e917e69cb" );
-	    LinearLayout layout = (LinearLayout)findViewById(R.id.mainLayout);
-	    layout.addView(adView);
-	    
-	    new AsyncTask<String, Void, Integer>() {
-			/** Work to do in background (Request)*/
-			@Override
-			protected Integer doInBackground(String... urls) {
-				return 0;
-			}
-			/** After doing the doInBackground method we can use View elements*/
-			@Override
-			protected void onPostExecute(Integer result) {
-				adView.loadAd(new AdRequest());
-			}
-		}.execute();
-	    
-	    
-	    
-	    
 	    /** RefreshListener on news_listview so we know when the user pull to refresh*/
 		news_listview.setOnRefreshListener(new OnRefreshListener<ListView>() {
 			
@@ -260,8 +241,10 @@ public class MainActivity extends Activity {
 			/** After doing the doInBackground method we can use View elements*/
 			@Override
 			protected void onPostExecute(Integer result) {
+				news_adapter.notifyDataSetChanged(); 
 				/** Put loadinglayout to GONE, so we hide it*/
 				loadinglayout.setVisibility(LinearLayout.GONE);
+				
 			}
 		}.execute();
 		
@@ -278,7 +261,7 @@ public class MainActivity extends Activity {
 		
 		/** new AsyncTask to load the first time when the APP runs, after news ListView and the 'splash screen'*/
 		new AsyncTask<String, Void, Integer>() {
-			/** Work to do in background (Requests)*/
+			/** Work to do in background (Requests) */
 			@Override
 			protected Integer doInBackground(String... urls) {
 				//MAKE REQUESTS
@@ -297,6 +280,23 @@ public class MainActivity extends Activity {
 				return 0;
 			}
 		}.execute();
+		
+		/**Ads here:*/
+	    new AsyncTask<String, Void, Integer>() {
+			/** Work to do in background (Request)*/
+			@Override
+			protected Integer doInBackground(String... urls) {
+				return 0;
+			}
+			/** After doing the doInBackground method we can use View elements*/
+			@Override
+			protected void onPostExecute(Integer result) {
+				adView=new AdView(MainActivity.this, AdSize.BANNER,"a15144e917e69cb" );
+			    RelativeLayout layout = (RelativeLayout)findViewById(R.id.relative);
+				//layout.addView(adView);
+				adView.loadAd(new AdRequest());
+			}
+		}.execute();
 	}
 	
 	/** Download the news from the WebSite and added to the ListView news.*/
@@ -304,7 +304,6 @@ public class MainActivity extends Activity {
 		pXml = new ParserXML(URL.news_URL);
 		news_list = pXml.parse();
 		news_adapter.setList(news_list);
-		
 	}
 	
 	/** Download the CopLog from the WebSite and added to the ListView coplog.*/
