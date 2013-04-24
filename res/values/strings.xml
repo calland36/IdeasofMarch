@@ -4,6 +4,7 @@
     <string name="app_name">Cedar Street Times</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
+    <string name="about_dialog">Cedar Street Times was established September 1, 2008, and is published weekly at 306 Grand Avenue, Pacific Grove, California 93950. We were adjudicated a newspaper of general circulation for Monterey County on July 16, 2010. Press deadline is Wednesday, noon. The paper is available Fridays at various location throughout the City and the Peninsula. Email subscribers receive their edition on Thursday evenings.</string>
 
     <color name="blue_light">#81BEF7</color>
 </resources>

@@ -10,3 +10,4 @@
 *.dex
 
 *.class
+/bin

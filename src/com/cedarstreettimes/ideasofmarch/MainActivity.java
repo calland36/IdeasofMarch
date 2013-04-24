@@ -3,6 +3,7 @@ package com.cedarstreettimes.ideasofmarch;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -53,6 +54,7 @@ public class MainActivity extends Activity {
 	private static final int MNU_OPT_FB = 1;
 	private static final int MNU_OPT_TW = 2;
 	private static final int MNU_OPT_MA = 3;
+	private static final int MNU_OPT_AB = 4;
 	
 	/** LinearLayout to show loading state when making a GET request*/
 	private LinearLayout loadinglayout;
@@ -327,9 +329,11 @@ public class MainActivity extends Activity {
 	}
 	
 	public void setListViewCommunity(){
-		pHtml = new ParserHTML(URL.community_URL);
-		try {
-			community_list = pHtml.scrapeUpdates();
+		pXml = new ParserXML(URL.community_URL);
+//		pHtml = new ParserHTML(URL.community_URL);
+		try {	// changed 4/23/13 kgudger to Xml
+//			community_list = pHtml.scrapeUpdates();
+			community_list = pXml.scrapeUpdates();
 			community_adapter.setList(community_list);
 			//event_adapter.notifyDataSetChanged();
 		} catch (Exception e) {
@@ -391,6 +395,8 @@ public class MainActivity extends Activity {
 				R.drawable.twitter);
 		menu.add(Menu.NONE, MNU_OPT_MA, Menu.NONE, "Mail").setIcon(
 				android.R.drawable.ic_dialog_email);
+		menu.add(Menu.NONE, MNU_OPT_AB, Menu.NONE, "About").setIcon(
+				R.drawable.question); 
 		return true;
 	}
 
@@ -419,6 +425,14 @@ public class MainActivity extends Activity {
 			browserIntent.putExtra(Intent.EXTRA_SUBJECT, "Doubt");
 			browserIntent.putExtra(Intent.EXTRA_TEXT, "Hi Editor! ");
 			startActivity(Intent.createChooser(browserIntent, "Send Email"));
+			return true;
+		case MNU_OPT_AB:
+			/** If you press 4 (MNU_OPT_AB) launch this intent*/
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("Cedar Street Times");
+			builder.setMessage(R.string.about_dialog) ;
+			builder.create();
+			builder.show();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

@@ -180,8 +180,9 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int indicator_bg_top=0x7f02000e;
         public static final int list_selector=0x7f02000f;
         public static final int logo=0x7f020010;
-        public static final int treeslogo=0x7f020011;
-        public static final int twitter=0x7f020012;
+        public static final int question=0x7f020011;
+        public static final int treeslogo=0x7f020012;
+        public static final int twitter=0x7f020013;
     }
     public static final class id {
         public static final int adView=0x7f050015;
@@ -225,6 +226,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int pull_to_refresh_header=0x7f030004;
     }
     public static final class string {
+        public static final int about_dialog=0x7f080009;
         public static final int app_name=0x7f080006;
         public static final int hello_world=0x7f080007;
         public static final int menu_settings=0x7f080008;

@@ -14,6 +14,13 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import android.text.format.DateFormat;
+import android.util.Log;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
+
 import com.cedarstreettimes.ideasofmarch.Article;
 
 /** Class ParserXML is to parse XML WebSites and add them to the APP*/
@@ -89,6 +96,64 @@ public class ParserXML {
 			throw new RuntimeException(ex);
 		} 
 		return news_list;
+	}
+	
+	/** Method that parses the data from XML from Twitter
+	 * @return ArrayList<String>	return a List with the data saved inside*/
+	public ArrayList<String> scrapeUpdates() {
+		
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		ArrayList<String> twit_list = new ArrayList<String>();
+
+		try{
+			
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document dom = builder.parse(this.getInputStream());
+			Element root = dom.getDocumentElement();
+			NodeList entries = root.getElementsByTagName("entry");
+
+			for (int i=0; i<entries.getLength(); i++){
+		
+				Node entry = entries.item(i);
+				NodeList tweet = entry.getChildNodes();
+				String author = "";
+				String text = "" ;
+				String date = "" ;
+				for (int j=0; j<tweet.getLength(); j++){
+					
+					Node data = tweet.item(j);
+					String label = data.getNodeName();
+
+					if (label.equals("title")){
+						
+						text = getNodeText(data);
+					
+					}else if (label.equals("author")){
+
+						NodeList authordata = data.getChildNodes();
+						for (int k = 0; k< authordata.getLength(); k++) {
+							
+							Node adata = authordata.item(k);
+							String alable = adata.getNodeName();
+
+							if (alable.equals("name")) 
+								author = getNodeText(adata);
+						}
+					}else if (label.equals("published")) {// 2013-04-23T02:29:12Z
+						String adate = getNodeText(data);
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+						Date ddate = sdf.parse(adate);
+						SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
+						date = formatter.format(ddate);
+					}
+				}
+				if (text.length()>0)
+					twit_list.add(text+"\nby "+author+" - "+date);
+			}
+		} catch (Exception ex){
+			throw new RuntimeException(ex);
+		} 
+		return twit_list;
 	}
 	
 	/** To get the data(text) from a XML Node

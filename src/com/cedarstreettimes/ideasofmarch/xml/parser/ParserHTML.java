@@ -28,7 +28,8 @@ public class ParserHTML {
 	   Elements elements = doc.select("p.minipost");
 	   String s = elements.toString();
 	   s = Jsoup.parse(s).text();
-	   String[] events = s.split("¥");
+//	   String[] events = s.split("ï¿½");
+	   String[] events = s.split("â€¢");
 	   for(int i=0;i<events.length;i++){
 	   	   events[i] = events[i].trim();
 	   }
