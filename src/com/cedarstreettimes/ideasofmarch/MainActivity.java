@@ -428,11 +428,8 @@ public class MainActivity extends Activity {
 			return true;
 		case MNU_OPT_AB:
 			/** If you press 4 (MNU_OPT_AB) launch this intent*/
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle("Cedar Street Times");
-			builder.setMessage(R.string.about_dialog) ;
-			builder.create();
-			builder.show();
+			browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.cedarstreettimes.com/about-us/android-app/"));
+		    startActivity(browserIntent);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
